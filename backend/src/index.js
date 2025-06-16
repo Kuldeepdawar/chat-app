@@ -1,7 +1,13 @@
 import express from "express";
+import dotenv from "dotenv";
+import { connectDataBase } from "./lib/db.js";
+
+import authRoutes from "./routes/auth.route.js";
 
 // Create an instance of an Express app
 const app = express();
+
+dotenv.config();
 
 // Middleware to parse incoming JSON requests (important for POST/PUT APIs)
 app.use(express.json());
@@ -11,7 +17,13 @@ app.get("/", (req, res) => {
   res.send("API is working");
 });
 
+app.use("/api/auth", authRoutes);
+
+// port
+const port = process.env.PORT;
+
 // Start the server on port 5001
-app.listen(5001, () => {
-  console.log("Server is running on port 5001");
+app.listen(port, () => {
+  connectDataBase();
+  console.log(`Server is running on ${port}`);
 });
