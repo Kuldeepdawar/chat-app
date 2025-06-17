@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 import cookieParser from "cookie-parser";
 import { connectDataBase } from "./lib/db.js";
 
@@ -14,6 +15,12 @@ dotenv.config();
 // Middleware to parse incoming JSON requests (important for POST/PUT APIs)
 app.use(express.json());
 app.use(cookieParser());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/message", messageRoutes);
