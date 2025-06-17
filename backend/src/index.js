@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import { connectDataBase } from "./lib/db.js";
 
 import authRoutes from "./routes/auth.route.js";
+import messageRoutes from "./routes/message.route.js";
 
 // Create an instance of an Express app
 const app = express();
@@ -14,12 +15,8 @@ dotenv.config();
 app.use(express.json());
 app.use(cookieParser());
 
-// Define a sample test route
-app.get("/", (req, res) => {
-  res.send("API is working");
-});
-
 app.use("/api/auth", authRoutes);
+app.use("/api/message", messageRoutes);
 
 // port
 const port = process.env.PORT;
