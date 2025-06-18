@@ -1,50 +1,70 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import {
   Eye,
   EyeOff,
+  Loader2,
+  Lock,
   Mail,
   MessageSquare,
   User,
-  Lock,
-  Loader2,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+
 import AuthImagePattern from "../components/AuthImagePattern";
+import toast from "react-hot-toast";
 
 const SignUpPage = () => {
-  // state fo show password and not
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    fullname: "",
+    fullName: "",
     email: "",
     password: "",
   });
 
-  const { isSigningUp, signup } = useAuthStore();
+  const { signup, isSigningUp } = useAuthStore();
 
-  const validateForm = () => {};
+  const validateForm = () => {
+    if (!formData.fullName.trim()) return toast.error("Full name is required");
+    if (!formData.email.trim()) return toast.error("Email is required");
+    if (!/\S+@\S+\.\S+/.test(formData.email))
+      return toast.error("Invalid email format");
+    if (!formData.password) return toast.error("Password is required");
+    if (formData.password.length < 6)
+      return toast.error("Password must be at least 6 characters");
+
+    return true;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const success = validateForm();
+
+    if (success === true) signup(formData);
   };
+
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
-      {/*left side */}
-
+      {/* left side */}
       <div className="flex flex-col justify-center items-center p-6 sm:p-12">
         <div className="w-full max-w-md space-y-8">
-          {/*LOGO */}
+          {/* LOGO */}
           <div className="text-center mb-8">
             <div className="flex flex-col items-center gap-2 group">
-              <div className="size-12 rounded-xl bg-primary/10 flex items-center justify-center group:hover:bg-primary/20 transition-colors">
+              <div
+                className="size-12 rounded-xl bg-primary/10 flex items-center justify-center 
+              group-hover:bg-primary/20 transition-colors"
+              >
                 <MessageSquare className="size-6 text-primary" />
               </div>
               <h1 className="text-2xl font-bold mt-2">Create Account</h1>
               <p className="text-base-content/60">
-                Get Started with your free Account
+                Get started with your free account
               </p>
             </div>
           </div>
+
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="form-control">
               <label className="label">
@@ -58,9 +78,9 @@ const SignUpPage = () => {
                   type="text"
                   className={`input input-bordered w-full pl-10`}
                   placeholder="John Doe"
-                  value={formData.fullname}
+                  value={formData.fullName}
                   onChange={(e) =>
-                    setFormData({ ...formData, fullname: e.target.value })
+                    setFormData({ ...formData, fullName: e.target.value })
                   }
                 />
               </div>
@@ -85,8 +105,6 @@ const SignUpPage = () => {
                 />
               </div>
             </div>
-
-            {/*email field */}
 
             <div className="form-control">
               <label className="label">
@@ -118,6 +136,7 @@ const SignUpPage = () => {
                 </button>
               </div>
             </div>
+
             <button
               type="submit"
               className="btn btn-primary w-full"
@@ -133,6 +152,7 @@ const SignUpPage = () => {
               )}
             </button>
           </form>
+
           <div className="text-center">
             <p className="text-base-content/60">
               Already have an account?{" "}
@@ -144,7 +164,8 @@ const SignUpPage = () => {
         </div>
       </div>
 
-      {/*right hand side */}
+      {/* right side */}
+
       <AuthImagePattern
         title="Join our community"
         subtitle="Connect with friends, share moments, and stay in touch with your loved ones."
@@ -152,5 +173,4 @@ const SignUpPage = () => {
     </div>
   );
 };
-
 export default SignUpPage;

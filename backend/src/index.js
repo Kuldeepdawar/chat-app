@@ -16,11 +16,15 @@ dotenv.config();
 app.use(express.json());
 app.use(cookieParser());
 
+app.get("/", (req, res) => {
+  res.send("kuldeep running");
+});
+
 app.use("/api/auth", authRoutes);
 app.use("/api/message", messageRoutes);
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "http://localhost:5173", // your frontend port
     credentials: true,
   })
 );
