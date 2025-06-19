@@ -1,13 +1,9 @@
-// import axios from "axios";
-
-// export const axiosInstance = axios.create({
-//   baseURL: "http://localhost:5001/api", // Update this for production
-//   withCredentials: true, // Required if using cookies/sessions
-// });
-
 import axios from "axios";
 
-export const axiosAPI = axios.create({
-  baseURL: "http://localhost:5001/api",
+export const axiosInstance = axios.create({
+  baseURL:
+    import.meta.env.MODE === "development"
+      ? "http://localhost:5001/api"
+      : "/api",
   withCredentials: true,
 });
